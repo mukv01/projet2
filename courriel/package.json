@@ -1,0 +1,23 @@
+{
+  "name": "courriel",
+  "version": "1.0.0",
+  "description": "Mini-serveur HTTP, courriel, pour le partage de messages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mukv01/projet2.git"
+  },
+  "keywords": [
+    "courriel",
+    "serveur"
+  ],
+  "author": "Aline, Ariella, Arnaud,  Reagan et Vestine",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mukv01/projet2/issues"
+  },
+  "homepage": "https://github.com/mukv01/projet2#readme"
+}
