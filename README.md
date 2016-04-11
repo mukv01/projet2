@@ -31,16 +31,19 @@ Le travail en groupes (de 4 à 8) est conseillé mais pas garant d'une meilleure n
 
 # Installation
 	1. Installer le module express en exécutant:
-		**$ npm install express --save**
+		$ npm install express --save
 	  
 	2. Installer le module jade en exécutant:
-		**$ npm install jade --save**
+		$ npm install jade --save
 
 	3. Installer le module basic-auth en exécutant:
-		**$ npm install basic-auth --save**
+		$ npm install basic-auth --save
 	  
 	4. Installer le module crypto en exécutant:
-		**$ npm install crypto --save**
+		$ npm install crypto --save
 		
 	5. Installer le module fs en exécutant:
-		**$ npm install fs --save**
+		$ npm install fs --save
+		
+	5. Installer le module fs en exécutant:
+		$ npm install body-parser --save

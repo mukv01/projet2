@@ -1,0 +1,29 @@
+//inbox_message.jade
+extends layout
+
+block topLeftRegion
+	a(class='blue-theme',href='/compose') Compose
+	
+block bottomLeftRegion
+	table
+		tr
+			td
+				a(class='blue-theme active',href='/inbox') Inbox
+		tr
+			td
+				a(class='blue-theme',href='/outbox') Outbox
+		tr
+			td
+				a(class='blue-theme',href='/yp') Yellow Page
+				
+block bottomRightRegion
+	table
+		tr
+			td(class='bold') From:
+			td #{from}
+		tr
+			td(class='bold') Date:
+			td #{date}
+		tr
+			td(class='bold') Message:
+			td #{msg}

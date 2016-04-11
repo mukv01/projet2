@@ -1,0 +1,74 @@
+{
+	"user1":{
+		"name":"Jean Fanchon",
+		"password":"601ae9b2f1c323c6d54d76fc7a0a94fe",
+		"inbox": [
+		{
+			"from": "user2",
+			"date": "2015 12 28 20:15:42",
+			"msg": "Un court message ...." },
+		{
+			"from": "user3",
+			"date": "2016 01 03 10:15:31",
+			"msg": "Un autre message ...." }
+		],
+		"outbox": [
+		{
+			"to": "user2",
+			"date": "2016 01 12 20:15:42",
+			"msg": "Bla bla bla ...." } 
+		],
+		"yp": {
+			"user2": {"name": "Jeanne Gagnon"},
+			"user3": {"name": "Pierre Tremblay"} 
+		}
+	},
+	"user2":{
+		"name":"Jeanne Gagnon",
+		"password":"601ae9b2f1c323c6d54d76fc7a0a94fe",
+		"inbox": [
+		{
+			"from": "user1",
+			"date": "2015 12 28 20:15:42",
+			"msg": "Un court message ...." },
+		{
+			"from": "user3",
+			"date": "2016 01 03 10:15:31",
+			"msg": "Un autre message ...." }
+		],
+		"outbox": [
+		{
+			"to": "user3",
+			"date": "2016 01 12 20:15:42",
+			"msg": "Bla bla bla ...." } 
+		],
+		"yp": {
+			"user1": {"name": "Jean Fanchon"},
+			"user3": {"name": "Pierre Tremblay"} 
+		}
+	},
+	"user3":{
+		"name":"Pierre Tremblay",
+		"password":"601ae9b2f1c323c6d54d76fc7a0a94fe",
+		"inbox": [
+		{
+			"from": "user1",
+			"date": "2015 12 28 20:15:42",
+			"msg": "Un court message ...." },
+		{
+			"from": "user2",
+			"date": "2016 01 03 10:15:31",
+			"msg": "Un autre message ...." }
+		],
+		"outbox": [
+		{
+			"to": "user1",
+			"date": "2016 01 12 20:15:42",
+			"msg": "Bla bla bla ...." } 
+		],
+		"yp": {
+			"user1": {"name": "Jean Fanchon"},
+			"user2": {"name": "Jeanne Gagnon"} 
+		}
+	}
+}

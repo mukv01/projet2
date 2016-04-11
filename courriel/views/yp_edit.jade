@@ -1,0 +1,31 @@
+//inbox.jade
+extends layout
+
+block topLeftRegion
+	a(class='blue-theme',href='/compose') Compose
+	
+block bottomLeftRegion
+	table
+		tr
+			td
+				a(class='blue-theme active',href='/inbox') Inbox
+		tr
+			td
+				a(class='blue-theme',href='/outbox') Outbox
+		tr
+			td
+				a(class='blue-theme',href='/yp') Yellow Page
+				
+block bottomRightRegion
+	table
+		thead
+			tr
+				td From
+				td Date
+		tbody
+			each record, i in etat.mail
+				tr
+					td
+						a(href='/inbox_link?from=' + record.from + '&date=' + record.date + '&msg=' + record.msg) #{record.from}
+					td #{record.date}
+									

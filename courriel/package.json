@@ -19,5 +19,13 @@
   "bugs": {
     "url": "https://github.com/mukv01/projet2/issues"
   },
-  "homepage": "https://github.com/mukv01/projet2#readme"
+  "homepage": "https://github.com/mukv01/projet2#readme",
+  "dependencies": {
+    "basic-auth": "^1.0.3",
+    "body-parser": "^1.15.0",
+    "crypto": "0.0.3",
+    "express": "^4.13.4",
+    "fs": "0.0.2",
+    "jade": "^1.11.0"
+  }
 }
