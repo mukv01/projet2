@@ -4,7 +4,11 @@ html
 	head
 		title= title
 		meta(name='author',content=authors)
+		link(rel='stylesheet',type='text/css',href='lib/bootstrap.min.css')
 		link(rel='stylesheet',type='text/css',href='css/courriel.css')
+		script(src='lib/jquery.min.js')
+		script(src='lib/bootstrap.min.js')
+		script(src='js/courriel.js')
 	body
 		table(class='main-frame')
 			tr(class='top-row')
@@ -15,5 +19,22 @@ html
 				td(id='bottom-left-region')
 					block bottomLeftRegion
 				td(id='bottom-right-region')
+					if(message)
+						if(error_type == 'success')
+							div(class='alert alert-success')
+								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
+								strong #{message}
+						if(error_type == 'info')
+							div(class='alert alert-info')
+								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
+								strong #{message}		
+						if(error_type == 'warning')
+							div(class='alert alert-warning')
+								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
+								strong #{message}
+						if(error_type == 'danger')
+							div(class='alert alert-danger')
+								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
+								strong #{message}	
 					block bottomRightRegion
 									

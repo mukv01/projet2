@@ -17,15 +17,21 @@ block bottomLeftRegion
 				a(class='blue-theme',href='/yp') Yellow Page
 				
 block bottomRightRegion
-	table
-		thead
+	form(name='form-compose', action='compose_send', method='post')
+		table
 			tr
-				td From
-				td Date
-		tbody
-			each record, i in etat.outbox
-				tr
-					td
-						a(href='/inbox_link?to=' + record.to + '&date=' + record.date + '&msg=' + record.msg) #{record.from}
-					td #{record.date}
+				td(class='bold') To:
+				td
+					select(name='select-compose')
+						each record, obj in etat.yp
+							option(value=obj) #{obj}
+			tr
+				td(class='bold') Message:
+				td
+					textarea(name='textarea-compose', cols='40', rows='5', placeholder='Type your message here...' )
+			tr
+				td
+				td
+					input(class='blue-theme', type='submit', value='Send')
+
 									

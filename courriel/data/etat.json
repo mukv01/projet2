@@ -6,17 +6,17 @@
 		{
 			"from": "user2",
 			"date": "2015 12 28 20:15:42",
-			"msg": "Un court message ...." },
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" },
 		{
 			"from": "user3",
 			"date": "2016 01 03 10:15:31",
-			"msg": "Un autre message ...." }
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" }
 		],
 		"outbox": [
 		{
 			"to": "user2",
 			"date": "2016 01 12 20:15:42",
-			"msg": "Bla bla bla ...." } 
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" } 
 		],
 		"yp": {
 			"user2": {"name": "Jeanne Gagnon"},
@@ -30,17 +30,17 @@
 		{
 			"from": "user1",
 			"date": "2015 12 28 20:15:42",
-			"msg": "Un court message ...." },
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" },
 		{
 			"from": "user3",
 			"date": "2016 01 03 10:15:31",
-			"msg": "Un autre message ...." }
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" }
 		],
 		"outbox": [
 		{
 			"to": "user3",
 			"date": "2016 01 12 20:15:42",
-			"msg": "Bla bla bla ...." } 
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" } 
 		],
 		"yp": {
 			"user1": {"name": "Jean Fanchon"},
@@ -54,17 +54,17 @@
 		{
 			"from": "user1",
 			"date": "2015 12 28 20:15:42",
-			"msg": "Un court message ...." },
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" },
 		{
 			"from": "user2",
 			"date": "2016 01 03 10:15:31",
-			"msg": "Un autre message ...." }
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" }
 		],
 		"outbox": [
 		{
 			"to": "user1",
 			"date": "2016 01 12 20:15:42",
-			"msg": "Bla bla bla ...." } 
+			"msg": "601ae9b2f1c323c6d54d76fc7a0a94fe" } 
 		],
 		"yp": {
 			"user1": {"name": "Jean Fanchon"},

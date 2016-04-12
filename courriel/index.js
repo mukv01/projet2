@@ -37,7 +37,7 @@ var KEY = 'Pa$$w0rd'; //crypto.randomBytes(32); // This key should be stored in 
 //console.log(KEY);
 
 var authors = 'Aline Landry, Ariella Sota, Arnaud Niyonkuru, Reagan Shuku, Vestine Mukeshimana';
-var username = "";
+var gUsername = "";
 
 /**
  * Fonction appelé lorsque le client tente de se connecter sur le serveur pour la 1ère fois.
@@ -64,7 +64,7 @@ var auth = function (req, res, next) {
 			//console.log('t = ' + t);
 			var pass = decrypt(etat[userObj].password);
 			if(user.pass == pass) {
-				username = user.name;
+				gUsername = user.name;
 				found = true;
 				console.log('Logged in successfully');
 				next();
@@ -90,21 +90,34 @@ app.get('/register', function (req, res) {
 	res.render('register', { 'title': 'Sign Up', 'authors':authors});
 });
 
-app.post('/register_submit', function (req, res) {
+app.post('/register_submit',function (req, res) {
 	console.log('/register_submit');
 	// pull the form variables off the request body
-	var username = req.body.text-username;
-	var password = req.body.text-password;
+	var name = req.body['text-name'];
+	var username = req.body['text-username'];
+	var password = req.body['text-password'];
 		
-	console.log(req.body);
-	//console.log(JSON.stringify(req));
-	//console.log(req.body.username);
-  
-	res.redirect('/login');
+	var found = false;
+	
+	for(var userObj in etat) {
+		if(username === userObj.toString()) {
+			found = true;
+			break;
+		}
+	}
+	//console.log(req.body);
+	//console.log(name);
+	//console.log(username);
+	//console.log(password);
+	if(!found) {
+		//console.log(pass);
+		etat[username] = {'name':name, 'password':encrypt(password), 'inbox':[], 'outbox':[], 'yp':{}};
+		res.render('register', {'title': 'Inbox', 'authors':authors,'message':'User "' + username + '" added successfully','error_type':'success'});
+	}
+	else {
+		res.render('register', {'title': 'Sign Up', 'authors':authors,'message':'This user "' + username + '" already exists','error_type':'danger'});
+	}
 });
-
-
-
 
 app.get('/login', auth, function (req, res) {
 	console.log('/login');
@@ -113,33 +126,55 @@ app.get('/login', auth, function (req, res) {
 
 app.get('/inbox', auth, function (req, res) {
     console.log('/inbox');
-	res.render('inbox', { 'title': 'Inbox', 'authors':authors, 'etat': etat[username]});
+	res.render('inbox', { 'title': 'Inbox', 'authors':authors, 'etat': etat[gUsername]});
 });
 
 app.get('/inbox_message', auth, function (req, res) {
 	console.log('/inbox_message');
-	res.render('inbox_message', { 'title': 'Inbox message', 'authors':authors, 'msg': req.query.msg,'from': req.query.from,'date': req.query.date});
+	res.render('inbox_message', { 'title': 'Inbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'from': req.query.from,'date': req.query.date});
 });
 
 app.get('/outbox', auth, function (req, res) {
     console.log('/outbox');
-	res.render('outbox', { 'title': 'Outbox', 'authors':authors, 'etat': etat[username]});
+	res.render('outbox', { 'title': 'Outbox', 'authors':authors, 'etat': etat[gUsername]});
 });
 
 app.get('/outbox_message', auth, function (req, res) {
 	console.log('/outbox_message');
-	res.render('outbox_message', { 'title': 'Outbox message', 'authors':authors, 'msg': req.query.msg,'to': req.query.to,'date': req.query.date});
+	res.render('outbox_message', { 'title': 'Outbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'to': req.query.to,'date': req.query.date});
 });
 
 app.get('/compose', auth, function (req, res) {
     console.log('/compose');
-	res.render('compose', { 'title': 'Compose', 'authors':authors, 'etat': etat[username]});
+	res.render('compose', { 'title': 'Compose', 'authors':authors, 'etat': etat[gUsername]});
+});
+
+app.post('/compose_send', auth, function (req, res) {
+	console.log('/compose_send');
+	// pull the form variables off the request body
+	var to = req.body['select-compose'];
+	var msg = req.body['textarea-compose'];
+	var date = getCurrentDateTimeText();
+	
+	etat[gUsername]['outbox'].push({
+		"to": to,
+		"date": date,
+		"msg": encrypt(msg) 
+	}); 
+	
+	etat[to]['inbox'].push({
+		"from": gUsername,
+		"date": date,
+		"msg": encrypt(msg) 
+	});
+		
+	res.render('outbox', {'title': 'Outbox Message', 'authors':authors, 'etat': etat[gUsername], 'message':'Message sent','error_type':'success'});
 });
 
 app.get('/yp', auth, function (req, res) {
     console.log('/yp');
-	 console.log(etat[username].yp);
-	res.render('yp', { 'title': 'Yp', 'authors':authors, 'etat': etat[username]});
+	 console.log(etat[gUsername].yp);
+	res.render('yp', { 'title': 'Yp', 'authors':authors, 'etat': etat[gUsername]});
 });
 
 

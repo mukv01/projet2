@@ -1,4 +1,4 @@
-//inbox.jade
+//yp_add.jade
 extends layout
 
 block topLeftRegion
@@ -8,24 +8,29 @@ block bottomLeftRegion
 	table
 		tr
 			td
-				a(class='blue-theme active',href='/inbox') Inbox
+				a(class='blue-theme',href='/inbox') Inbox
 		tr
 			td
 				a(class='blue-theme',href='/outbox') Outbox
 		tr
 			td
-				a(class='blue-theme',href='/yp') Yellow Page
+				a(class='blue-theme active',href='/yp') Yellow Page
 				
 block bottomRightRegion
-	table
-		thead
+	form(name='form-add', action='/yp_add_save', method='post')
+		table
 			tr
-				td From
-				td Date
-		tbody
-			each record, i in etat.mail
-				tr
-					td
-						a(href='/inbox_link?from=' + record.from + '&date=' + record.date + '&msg=' + record.msg) #{record.from}
-					td #{record.date}
-									
+				td(class='bold')
+					label(for='text-address') Address:
+				td
+					select(name='select-address')
+						each record, obj in users
+							option(value=obj) #{obj}
+				td(class='bold')
+					label(for='text-name') Name:
+				td
+					input(type='text', name='text-name', value='')
+			tr
+				td
+				td
+					input(class='blue-theme', type='submit', value='Add')
