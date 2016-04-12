@@ -27,6 +27,8 @@ a.blue-theme:link {
 /* mouse over link */
 a.blue-theme:hover {
     background-color: #16649b;
+	text-decoration: none;
+	color: white;
 }
 
 /* selected link */
@@ -72,6 +74,7 @@ thead, td.bold {
 
 #bottom-right-region {
   vertical-align:top;
+  padding: 20px 20px 20px 20px;
 }
 
 #register-form {
@@ -100,4 +103,10 @@ thead, td.bold {
 
 #register-form h1 {
 	text-align:center;
+}
+
+
+#logout {
+	text-align:right;
+	margin-right:20px;
 }

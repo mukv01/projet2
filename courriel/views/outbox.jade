@@ -1,4 +1,4 @@
-//inbox.jade
+//outbox.jade
 extends layout
 
 block topLeftRegion
@@ -22,10 +22,14 @@ block bottomRightRegion
 			tr
 				td To
 				td Date
+				td Actions
 		tbody
 			each record, i in etat.outbox
 				tr
-					td
-						a(href='/outbox_message?to=' + record.to + '&date=' + record.date + '&msg=' + record.msg) #{record.to}
+					td #{record.to}
 					td #{record.date}
+					td 
+						a(href='/outbox_read_message?to=' + record.to + '&date=' + record.date + '&msg=' + record.msg) Read
+						| |  
+						a(href='#', onclick='onDeleteMessage(\"' + '/outbox_delete_message?to=' + record.to + '&date=' + record.date + '\")') Delete
 									

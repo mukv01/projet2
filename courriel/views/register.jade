@@ -11,23 +11,7 @@ html
 		script(src='lib/bootstrap.min.js')
 		script(src='js/courriel.js')
 	body
-		if(message)
-			if(error_type == 'success')
-				div(class='alert alert-success')
-					a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-					strong #{message}
-			if(error_type == 'info')
-				div(class='alert alert-info')
-					a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-					strong #{message}		
-			if(error_type == 'warning')
-				div(class='alert alert-warning')
-					a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-					strong #{message}
-			if(error_type == 'danger')
-				div(class='alert alert-danger')
-					a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-					strong #{message}
+		include ./warning.jade
 		div(id='register-form')
 			h1 Welcome
 			hr
@@ -37,22 +21,22 @@ html
 						td(class='bold')
 							label(for='text-name') Name:
 						td
-							input(type='text', name='text-name', value='Jean Francois', placeholder='Enter your name', required)
+							input(type='text', name='text-name', value='', placeholder='Enter your name', required)
 					tr
 						td(class='bold')
 							label(for='text-username') Username:
 						td
-							input(type='text', name='text-username', value='user1', placeholder='Enter username', required)
+							input(type='text', name='text-username', value='', placeholder='Enter username', required)
 					tr
 						td(class='bold')
 							label(for='text-password') Password:
 						td
-							input(type='password', name='text-password', value='test', placeholder='Enter password', required)
+							input(type='password', name='text-password', value='', placeholder='Enter password', required)
 					tr
 						td(class='bold')
 							label(for='text-confirm-password') Confirm Password:
 						td
-							input(type='password', name='text-confirm-password', value='test', placeholder='Confirm password', required)
+							input(type='password', name='text-confirm-password', value='', placeholder='Confirm password', required)
 					tr
 						td
 						td

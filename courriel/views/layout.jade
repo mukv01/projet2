@@ -19,22 +19,8 @@ html
 				td(id='bottom-left-region')
 					block bottomLeftRegion
 				td(id='bottom-right-region')
-					if(message)
-						if(error_type == 'success')
-							div(class='alert alert-success')
-								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-								strong #{message}
-						if(error_type == 'info')
-							div(class='alert alert-info')
-								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-								strong #{message}		
-						if(error_type == 'warning')
-							div(class='alert alert-warning')
-								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-								strong #{message}
-						if(error_type == 'danger')
-							div(class='alert alert-danger')
-								a(href='#', class='close', data-dismiss='alert' aria-label='close') &times;
-								strong #{message}	
+					div(id='logout')
+						a(href='/logout') Logout
+					include ./warning.jade
 					block bottomRightRegion
 									

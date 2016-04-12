@@ -22,10 +22,14 @@ block bottomRightRegion
 			tr
 				td From
 				td Date
+				td Actions
 		tbody
 			each record, i in etat.inbox
 				tr
-					td
-						a(href='/inbox_message?from=' + record.from + '&date=' + record.date + '&msg=' + record.msg) #{record.from}
+					td #{record.from}
 					td #{record.date}
+					td 
+						a(href='/inbox_read_message?from=' + record.from + '&date=' + record.date + '&msg=' + record.msg) Read 
+						| | 
+						a(href='#', onclick='onDeleteMessage(\"' + '/inbox_delete_message?from=' + record.from + '&date=' + record.date + '\")') Delete
 									

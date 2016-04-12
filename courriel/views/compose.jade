@@ -17,7 +17,7 @@ block bottomLeftRegion
 				a(class='blue-theme',href='/yp') Yellow Page
 				
 block bottomRightRegion
-	form(name='form-compose', action='compose_send', method='post')
+	form(action='compose_send', method='post')
 		table
 			tr
 				td(class='bold') To:
@@ -26,9 +26,12 @@ block bottomRightRegion
 						each record, obj in etat.yp
 							option(value=obj) #{obj}
 			tr
+				td &nbsp;
+				td &nbsp;
+			tr
 				td(class='bold') Message:
 				td
-					textarea(name='textarea-compose', cols='40', rows='5', placeholder='Type your message here...' )
+					textarea(name='textarea-compose', cols='40', rows='5', placeholder='Type your message here...', required)
 			tr
 				td
 				td

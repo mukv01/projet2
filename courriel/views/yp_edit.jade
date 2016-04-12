@@ -17,17 +17,18 @@ block bottomLeftRegion
 				a(class='blue-theme active',href='/yp') Yellow Page
 				
 block bottomRightRegion
-	form(name='form-add', action='/yp_edit_save', method='post')
+	form(action='yp_edit_save', method='post')
 		table
 			tr
 				td(class='bold')
 					label(for='text-address') Address:
 				td
-					input(type='text', name='text-address', value='')
+					input(type='text', name='text-address', value= address, disabled, required)
+			tr
 				td(class='bold')
 					label(for='text-name') Name:
 				td
-					input(type='text', name='text-name', value='')
+					input(type='text', name='text-name', value= name, placeholder='Enter the name', required)
 			tr
 				td
 				td

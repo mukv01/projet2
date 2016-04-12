@@ -17,7 +17,7 @@ block bottomLeftRegion
 				a(class='blue-theme active',href='/yp') Yellow Page
 				
 block bottomRightRegion
-	form(name='form-add', action='/yp_add_save', method='post')
+	form(action='yp_add_save', method='post')
 		table
 			tr
 				td(class='bold')
@@ -26,10 +26,11 @@ block bottomRightRegion
 					select(name='select-address')
 						each record, obj in users
 							option(value=obj) #{obj}
+			tr
 				td(class='bold')
 					label(for='text-name') Name:
 				td
-					input(type='text', name='text-name', value='')
+					input(type='text', name='text-name', value='', placeholder='Enter the name', required)
 			tr
 				td
 				td

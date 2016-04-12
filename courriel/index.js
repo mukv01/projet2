@@ -20,14 +20,32 @@ app.set('view engine', 'jade');
 var fs = require("fs");
 var etat = {};
 
-fs.readFile('./data/etat.json', 'utf8', function (err, data) {
-	if (err) {
-		throw err;
-	}
-	//console.log(data);
-	etat = JSON.parse(data);
-});
+/**
+ * Fonction pour lire l'état dans le fichier
+ */
+var readState = function() {
+	fs.readFile('./data/etat.json', 'utf8', function (err, data) {
+		if (err) {
+			throw err;
+		}
+		//console.log(data);
+		etat = JSON.parse(data);
+	});
+}
 
+/**
+ * Fonction pour écrire l'état dans le fichier
+ */
+var writeState = function() {
+	fs.writeFile('./data/etat.json', JSON.stringify(etat), function (err) {
+		if (err) {
+			throw err;
+		}
+		console.log('complete');
+	});
+}
+
+readState();
 
 //chargement du module pour la cryptographie
 var crypto = require('crypto');
@@ -92,10 +110,12 @@ app.get('/register', function (req, res) {
 
 app.post('/register_submit',function (req, res) {
 	console.log('/register_submit');
-	// pull the form variables off the request body
-	var name = req.body['text-name'];
-	var username = req.body['text-username'];
-	var password = req.body['text-password'];
+	
+	//prendre les variables dans request body
+	var name 			= req.body['text-name'];
+	var username 		= req.body['text-username'];
+	var password 		= req.body['text-password'];
+	var confirmPassword = req.body['text-confirm-password'];
 		
 	var found = false;
 	
@@ -105,14 +125,15 @@ app.post('/register_submit',function (req, res) {
 			break;
 		}
 	}
-	//console.log(req.body);
-	//console.log(name);
-	//console.log(username);
-	//console.log(password);
+	
 	if(!found) {
-		//console.log(pass);
-		etat[username] = {'name':name, 'password':encrypt(password), 'inbox':[], 'outbox':[], 'yp':{}};
-		res.render('register', {'title': 'Inbox', 'authors':authors,'message':'User "' + username + '" added successfully','error_type':'success'});
+		if(password === confirmPassword) {
+			etat[username] = {'name':name, 'password':encrypt(password), 'inbox':[], 'outbox':[], 'yp':{}};
+			res.render('register', {'title': 'Inbox', 'authors':authors,'message':'User "' + username + '" added successfully','error_type':'success'});
+		}
+		else {
+			res.render('register', {'title': 'Sign Up', 'authors':authors,'message':'Passwords don\'t match','error_type':'danger'});
+		}		
 	}
 	else {
 		res.render('register', {'title': 'Sign Up', 'authors':authors,'message':'This user "' + username + '" already exists','error_type':'danger'});
@@ -124,14 +145,33 @@ app.get('/login', auth, function (req, res) {
 	res.redirect('/inbox');
 });
 
+app.get('/logout', auth, function (req, res) {
+	res.render('register', {'title': 'Sign Up', 'authors':authors,'message':'Please restart your browser to fully logout','error_type':'warning'});
+});
+
 app.get('/inbox', auth, function (req, res) {
     console.log('/inbox');
 	res.render('inbox', { 'title': 'Inbox', 'authors':authors, 'etat': etat[gUsername]});
 });
 
-app.get('/inbox_message', auth, function (req, res) {
-	console.log('/inbox_message');
-	res.render('inbox_message', { 'title': 'Inbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'from': req.query.from,'date': req.query.date});
+app.get('/inbox_read_message', auth, function (req, res) {
+	console.log('/inbox_read_message');
+	res.render('inbox_read_message', { 'title': 'Inbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'from': req.query.from,'date': req.query.date});
+});
+
+app.get('/inbox_delete_message', auth, function (req, res) {
+	console.log('/inbox_delete_message');
+	//console.log(req.query);
+	for(i in etat[gUsername].inbox) {
+		console.log(i);
+		var record = etat[gUsername].inbox[i];
+		if(record.from === req.query.from && record.date === req.query.date) {
+			etat[gUsername].inbox.splice(i,1);
+			writeState();
+			res.render('inbox', { 'title': 'Inbox', 'authors':authors, 'etat': etat[gUsername],'message':'Message deleted','error_type':'success'});
+			break;
+		}
+	}
 });
 
 app.get('/outbox', auth, function (req, res) {
@@ -139,10 +179,24 @@ app.get('/outbox', auth, function (req, res) {
 	res.render('outbox', { 'title': 'Outbox', 'authors':authors, 'etat': etat[gUsername]});
 });
 
-app.get('/outbox_message', auth, function (req, res) {
-	console.log('/outbox_message');
-	res.render('outbox_message', { 'title': 'Outbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'to': req.query.to,'date': req.query.date});
+app.get('/outbox_read_message', auth, function (req, res) {
+	console.log('/outbox_read_message');
+	res.render('outbox_read_message', { 'title': 'Outbox message', 'authors':authors, 'msg': decrypt(req.query.msg),'to': req.query.to,'date': req.query.date});
 });
+
+app.get('/outbox_delete_message', auth, function (req, res) {
+	console.log('/outbox_delete_message');
+	for(i in etat[gUsername].outbox) {
+		var record = etat[gUsername].outbox[i];
+		if(record.to === req.query.to && record.date === req.query.date) {
+			etat[gUsername].outbox.splice(i,1);
+			writeState();
+			res.render('outbox', { 'title': 'Outbox', 'authors':authors, 'etat': etat[gUsername],'message':'Message deleted','error_type':'success'});
+			break;
+		}
+	}
+});
+
 
 app.get('/compose', auth, function (req, res) {
     console.log('/compose');
@@ -167,21 +221,75 @@ app.post('/compose_send', auth, function (req, res) {
 		"date": date,
 		"msg": encrypt(msg) 
 	});
-		
+	writeState();	
 	res.render('outbox', {'title': 'Outbox Message', 'authors':authors, 'etat': etat[gUsername], 'message':'Message sent','error_type':'success'});
 });
 
 app.get('/yp', auth, function (req, res) {
     console.log('/yp');
-	 console.log(etat[gUsername].yp);
+	 //console.log(etat[gUsername].yp);
 	res.render('yp', { 'title': 'Yp', 'authors':authors, 'etat': etat[gUsername]});
 });
 
+app.get('/yp_delete', auth, function (req, res) {
+	console.log('/yp_delete');
+	for(record in etat[gUsername].yp) {
+		if(record.toString() === req.query.user) {
+			delete etat[gUsername].yp[record.toString()];
+			writeState();
+			res.render('yp', { 'title': 'Yellow Page', 'authors':authors, 'etat': etat[gUsername],'message':'Contact deleted','error_type':'success'});
+			break;
+		}
+	}
+});
 
- 
+app.get('/yp_edit', auth, function (req, res) {
+    console.log('/yp_edit');
+	res.render('yp_edit', { 'title': 'Yellow Page', 'authors':authors, 'address': req.query.user, 'name': etat[gUsername].yp[req.query.user].name});
+});
+
+app.post('/yp_edit_save', auth, function (req, res) {
+    console.log('/yp_edit');
+	var address = req.body['text-address'];
+	var name 	= req.body['text-name'];
+	
+	etat[gUsername].yp[address] = {"name": name};
+	writeState();
+	
+	res.render('yp', { 'title': 'Yellow Page', 'authors':authors, 'etat': etat[gUsername],'message':'Contact modified','error_type':'success'});
+});
+
+app.get('/yp_add', auth, function (req, res) {
+    console.log('/yp_add');
+	res.render('yp_add', { 'title': 'Yellow Page', 'authors':authors, 'users': etat});
+});
+
+app.post('/yp_add_save', auth, function (req, res) {
+	console.log('/yp_add_save');
+    var address = req.body['select-address'];
+	var name 	= req.body['text-name'];
+	
+	var found = false;
+	
+	for(var userObj in etat[gUsername].yp) {
+		if(address === userObj.toString()) {
+			found = true;
+			break;
+		}
+	}
+	
+	if(!found) {
+		etat[gUsername].yp[address] = {"name": name};
+		writeState();
+		res.render('yp', { 'title': 'Yellow Page', 'authors':authors, 'etat': etat[gUsername],'message':'Contact added','error_type':'success'});
+	}
+	else {
+		res.render('yp', {'title': 'Yellow Page', 'authors':authors, 'etat': etat[gUsername],'message':'This user "' + address + '" already exists','error_type':'danger'});
+	}
+});
+
 app.listen(3000);
 console.log("mail app server running on localhost:3000");
-
 
 /**
  * Fonction pour coder le text
@@ -207,6 +315,8 @@ var decrypt = function (cipherText) {
 
 	return decrypted;
 };
+
+
 
 /**
  * Fonction pour arranger l'affichage de la date de cet instant.
@@ -244,3 +354,4 @@ var getCurrentDateTimeText = function (){
 	
 	return yyyy + " " +  mm + " " + dd + " " + hh + ":" + MM + ":" + ss;     
 };
+
