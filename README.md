@@ -43,7 +43,13 @@ Le travail en groupes (de 4 à 8) est conseillé mais pas garant d'une meilleure n
 		$ npm install crypto --save
 		
 	5. Installer le module fs en exécutant:
-		$ npm install fs --save
+		$ npm install fs --save 
 		
-	5. Installer le module fs en exécutant:
+	6. Installer le module fs en exécutant:
 		$ npm install body-parser --save
+		
+# Exécution
+	1. Taper la commande 
+		$ node index.js
+	
+	
