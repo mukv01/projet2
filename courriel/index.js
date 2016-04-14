@@ -6,7 +6,8 @@ var app = express();
 var basicAuth = require('basic-auth'); 
 
 var bodyParser = require('body-parser');
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
  //repertoires pour les fichiers statiques comme les fichiers css
 app.use(express.static(__dirname + '/public'));
@@ -37,7 +38,7 @@ var readState = function() {
  * Fonction pour écrire l'état dans le fichier
  */
 var writeState = function() {
-	fs.writeFile('./data/etat.json', JSON.stringify(etat), function (err) {
+	fs.writeFile('./data/etat.json', JSON.stringfy(etat), function (err) {
 		if (err) {
 			throw err;
 		}
