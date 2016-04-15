@@ -1,1 +1,3 @@
 node_modules
+/src/etat.json
+/src/public/js/courriel.js

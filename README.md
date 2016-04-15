@@ -1,55 +1,96 @@
-# projet2: Mini-serveur HTTP, couriel, pour le partage de messages
-## Description
+# Courriel
 
-Concevoir et implémenter un simple serveur de partage de messages chifrés avec la cryptographie asymetrique RSA.
+`Courriel` est un projet  pour le cours de
+__Technologies Internet, 2016__.
+Il s'agit d'un systÃ¨me de messagerie _pair-Ã -pair_,
+c.-Ã -d., sans serveur centrale.
 
-Ce projet comporte plusieurs parties:
+Le developpement du `courriel` est sÃ©parÃ© en deux parties:
 
-    1. Description du système du point de vue de fonctionnalité (spécification fonctionnelle):
-        - définir ce qui est possible à faire: "créer un nouveau message", "chercher les messages des autres pairs", "ajouter un nouveau contact", etc...
-        - créer un modèle pour le stockage des messages: "base de donnée", "système de fichiers", etc...
-    2. Réalisation du serveur HTTP coté client web qui va gérer l'interaction avec l'utilisateur :
-        - implémenter le serveur HTTP (en javascript côté serveur: "nodejs" et "express")
-        - faire le re-design de la page web du devoir 1 (http, css, javascript) pour l'adopter au serveur
-    3. Définition d'un protocole de communication entre les pairs (peers) qui permettra l'échange (synchronisation) de messages locaux entre eux
-    4. Réalisation du serveur HTTP coté "pair"
-    5. Considérations sur la sécurité
-		Pour des raisons de confidentialité, votre système va utiliser le chiffrement asymetrique RSA pour chiffrer et déchiffrer les messages
+1.  __Projet 1__: Interface graphique pour le `courriel` (code en `html/css/js`
+    Ã  executÃª par un navigateur).
 
-## Évaluation
+2.  __Projet 2__: Un mini-serveur permettant le partage (distribution)
+    des courriels (messages) entre plusieurs utilisateurs.
 
-L'évaluation du travail porte sur:
+## Projet 1: Interface web pour le _courriel_
 
-    1. spécification fonctionnelle (10%)
-    2. qualité de l'interface (40%)
-    3. qualité du code serveur (40%)
-    4. analyse de la sécurité (10%)
+On se donne une reprÃ©sentation de l'Ã©tat du systÃ¨me par une structure
+de donnÃ©es suivante:
 
-Remarque
+    etat = {
+        "inbox": [
+            {
+                "from": "AF22111212232211122",
+                "date": "2015 12 28 20:15:42",
+                "msg": "Un court message ...." },
+            {
+                "from": "AF22111212232211122",
+                "date": "2016 01 03 10:15:31",
+                "msg": "Un autre message ...." } ],
+        "outbox": [
+            {
+                "to": "AF22111212232211122",
+                "date": "2016 01 12 20:15:42",
+                "msg": "Bla bla bla ...." } ],
+        "yp": {
+            "AF22111212232211122": {"name": "Jean Fanchon"},
+            "90221F212A4200001AA": {"name": "Bob"} }
+    }
 
-Le travail en groupes (de 4 à 8) est conseillé mais pas garant d'une meilleure note!
+L'interface _web_ devrait pouvoir:
 
-# Installation
-	1. Installer le module express en exécutant:
-		$ npm install express --save
-	  
-	2. Installer le module jade en exécutant:
-		$ npm install jade --save
+1.  Visualiser l'Ã©tat: lecture des messages dans `etat.inbox` et
+`etat.outbox`, et des adresses dans `etat.yp`.
 
-	3. Installer le module basic-auth en exécutant:
-		$ npm install basic-auth --save
-	  
-	4. Installer le module crypto en exécutant:
-		$ npm install crypto --save
-		
-	5. Installer le module fs en exécutant:
-		$ npm install fs --save 
-		
-	6. Installer le module fs en exécutant:
-		$ npm install body-parser --save
-		
-# Exécution
-	1. Taper la commande 
-		$ node index.js
-	
-	
+2.  Composer un nouveau message en l'ajoutant dans la liste `etat.outbox`.
+
+3.  Modifier la liste d'adresse `etat.yp`
+
+Chaque groupe (de 4 Ã  6 personnes) devrait produire un document
+`courriel.html` accompagnÃ© par des documents `*.css` et `*.js`. L'Ã©tat
+initial (la valeur de la variable `etat`) devrait se trouver dans votre
+code javascript.
+
+## __Projet 2__: Un mini-serveur
+
+Le rÃ´le de `mini-serveur` est:
+
+1. d'initialiser, de maintenir, et de servir Ã  l'interface graphique
+la valeur de l'`etat`;
+
+2. d'Ã©changer avec les pairs les messages de `etat.outbox`;
+
+3. de chiffrer et dÃ©chiffrer les messages en utilisant la
+cryptographie asymÃ©trique (RSA), pour garantir la confidentialitÃ©.
+
+
+### Structure de l'application
+
+L'application se trouve dans `src/`
+
+      .
+      â”œâ”€â”€ client/index.js     -  code pour navigateur (via `browserify` -> `public/js/courriel.js`)
+      â”œâ”€â”€ index.js    - code pour le serveur
+      â”œâ”€â”€ peers.js    - communication/synchronisation entre pairs
+      â”œâ”€â”€ node_modules/...
+      â”œâ”€â”€ package.json  -  description de dÃ©pendances de l'application
+      â”œâ”€â”€ public   -  les fichiers dans `public/*` sont accessible aux clients "as is"
+      â”‚   â”œâ”€â”€ css/...
+      â”‚   â”œâ”€â”€ images/...
+      â”‚   â””â”€â”€ js/...
+      â””â”€â”€ views/courriel.jade - code `jade` pour la page `html` de l'application
+
+### ExÃ©cuter
+
+Faire:
+
+    > git clone https://github.com/mukv01/projet2.git
+    > cd courriel/src
+    > npm install
+    > npm run build
+    > npm start
+
+Le URL du serveur est: http://localhost:8888/
+
+changer le code pour avoir le second serveur au http://localhost:8889
