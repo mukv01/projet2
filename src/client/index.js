@@ -132,6 +132,7 @@ var onRedrawView = function() {
 		$('#bottom-right-region').html(content.join("\n"));
 		
 		$('#compose-link-send').click(function() {
+			stopPeriodicalRefresh();
 			$textarea = $('[name="compose-textarea-message"]');
 			$to = $('[name="compose-select-to"]');
 			newMessage($textarea.val(), $to.val());
@@ -171,6 +172,7 @@ var onRedrawView = function() {
 		$('#bottom-right-region').html(content.join("\n"));
 		
 		$('.inbox-link-letter').click(function() {
+			stopPeriodicalRefresh();
 			from = $(this).data('from');
 			date = $(this).data('date');
 			msg  = $(this).data('msg');
@@ -178,7 +180,6 @@ var onRedrawView = function() {
 			focus =  Navigation.INBOX_READ_MSG;
 			onRedrawView();
 		});
-		
         break;
 	case Navigation.INBOX_READ_MSG:
 		content.push("<table>");
@@ -231,6 +232,7 @@ var onRedrawView = function() {
 		$('#bottom-right-region').html(content.join("\n"));
 		
 		$('.outbox-link-letter').click(function() {
+			stopPeriodicalRefresh();
 			to   = $(this).data('to');
 			date = $(this).data('date');
 			msg  = $(this).data('msg');
@@ -289,6 +291,7 @@ var onRedrawView = function() {
 
 
 $('#compose-link').click(function() {
+	stopPeriodicalRefresh();
 	focus =  Navigation.COMPOSE;
 	
 	onReload( function() {
@@ -303,6 +306,7 @@ $('#compose-link').click(function() {
 });
 
 $('#inbox-link').click(function() {
+	startPeriodicalRefresh();
 	focus =  Navigation.INBOX;
 	onReload( function() {
 	  populateDecryptedLetters();
@@ -316,6 +320,7 @@ $('#inbox-link').click(function() {
 });
 
 $('#outbox-link').click(function() {
+	stopPeriodicalRefresh();
 	focus =  Navigation.OUTBOX;
 	onReload( function() {
 	  populateDecryptedLetters();
@@ -329,6 +334,7 @@ $('#outbox-link').click(function() {
 });
 
 $('#yp-link').click(function() {
+	stopPeriodicalRefresh();
 	focus =  Navigation.YP;
 	onReload( function() {
 	  populateDecryptedLetters();
@@ -356,6 +362,7 @@ onReload( function(err) {
             .end(console.log.bind(console));
         // add my public key to the yp
         addAddress((name || "me"), key.exportKey('public'));
+		startPeriodicalRefresh();
     } else while (true) {
         var pem = null;
         try {
@@ -363,6 +370,7 @@ onReload( function(err) {
             pem = CryptoJS.AES.decrypt(etat.encryptedKey, password)
                 .toString(CryptoJS.enc.Utf8);
             key = new NodeRSA(pem);
+			startPeriodicalRefresh();
             break;
         } catch (e) {
             alert("Please try again...");
@@ -373,6 +381,24 @@ onReload( function(err) {
     populateDecryptedLetters();
     onRedrawView();
 });
+
+var timer = null;
+
+var startPeriodicalRefresh = function() {
+	if (timer !== null) return;
+	timer = setInterval(function () {
+		onReload( function() {
+		  populateDecryptedLetters();
+		  onRedrawView();
+		});
+	}, 2000); 
+}
+
+var stopPeriodicalRefresh = function() {
+	clearInterval(timer);
+	timer = null;
+}
+
 
 /**
  * Fonction pour arranger l'affichage de la date de cet instant.
